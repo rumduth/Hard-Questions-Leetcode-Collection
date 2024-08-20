@@ -1,0 +1,27 @@
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        alphabet = Counter(t)
+        must_filled = len(alphabet)
+
+        filled = 0
+        filled_alphabet = Counter()
+
+        res = float('inf')
+        start = -1
+        left = 0
+        for right, c in enumerate(s):
+            filled_alphabet[c] += 1
+            if filled_alphabet[c] == alphabet[c]:
+                filled += 1
+            while filled == must_filled and filled_alphabet[c] >= alphabet[c] and alphabet[c] >= 1:
+                if res > right - left + 1:
+                    start = left
+                    res = right - left + 1
+                if filled_alphabet[s[left]] == alphabet[s[left]]:
+                    filled -= 1
+                filled_alphabet[s[left]] -= 1
+                left += 1
+           
+        if start == -1:
+            return ""
+        return s[start:start+res]
